@@ -1,0 +1,18 @@
+version: v2
+name: python-getting-started
+build:
+  method: docker
+  context: .
+  dockerfile: ./Dockerfile
+predeploy:
+  run: python manage.py migrate --noinput
+services:
+  - name: web
+    type: web
+    run: gunicorn config.wsgi
+    port: 8000
+    cpuCores: 0.25
+    ramMegabytes: 512
+    healthCheck:
+      enabled: true
+      httpPath: /healthz
